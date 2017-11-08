@@ -96,7 +96,7 @@ try:
             driver.get(njuskalo)
             elem = driver.find_elements_by_xpath(xpath_njuskalo)
             temp_njuskalo = [e.get_attribute("href") for e in elem]
-            print("Got njuskalo..")
+            print("Got njuskalo..", end="\r")
         except KeyboardInterrupt:
             driver.quit()
             display.stop()
@@ -109,7 +109,7 @@ try:
             driver.get(index)
             elem = driver.find_elements_by_xpath(xpath_index)
             temp_index = [e.get_attribute("href") for e in elem]
-            print("Got index..")
+            print("Got index..", end="\r")
         except KeyboardInterrupt:
             driver.quit()
             display.stop()
@@ -122,7 +122,7 @@ try:
             driver.get(oglasnik)
             elem = driver.find_elements_by_xpath(xpath_oglasnik)
             temp_oglasnik = [e.get_attribute("href") for e in elem]
-            print("Got oglasnik..")
+            print("Got oglasnik..", end="\r")
         except KeyboardInterrupt:
             driver.quit()
             display.stop()
@@ -135,17 +135,17 @@ try:
                 mail_body = mail_body + t + "\n"
 
         if mail_body != "":
-            print("###############################")
+            #print("###############################")
             print("New entries found! Notifying..")
             print(mail_body)
 
-            if len(temp_njuskalo) > 0:
+            if len(temp_oglasnik) > 0:
                 links_oglasnik = temp_oglasnik
 
             if len(temp_index) > 0:
                 links_index = temp_index
 
-            if len(temp_oglasnik) > 0:
+            if len(temp_njuskalo) > 0:
                 links_njuskalo = temp_njuskalo
 
             counter += 1
@@ -161,10 +161,9 @@ try:
         else:
             print("No new values found.")
 
-
-        print("Sleeping..........................")
-        time.sleep(5*30)
         print()
+        print("Sleeping...", end="\r")
+        time.sleep(5*60)
 
 except KeyboardInterrupt:
     driver.quit()
