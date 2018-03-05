@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 
-from bs4 import BeautifulSoup
-from selenium import webdriver
+import time
+import json
+import datetime
+import os
+from getpass import getpass
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
-from xvfbwrapper import Xvfb
-from getpass import getpass
-import time
-import datetime
-import os
 
-mail_to = ["m.zanetic@hotmail.com", "dsibenik@live.com", "mzanetic@erstebank.com"]
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from xvfbwrapper import Xvfb
+
+
+
 def send_mail(to, subject, text, attach):
     msg = MIMEMultipart()
 
@@ -42,15 +45,16 @@ def send_mail(to, subject, text, attach):
     # Should be mailServer.quit(), but that crashes...
     mailServer.close()
 
+with open('config.json') as config:
+    cfg = json.load(config)
+    gmail_user = cfg['gmail_username']
+    mail_to = cfg['mail_to']
+    njuskalo = cfg['njuskalo']
+    index = cfg['index']
+    oglasnik = cfg['oglasnik']
 
-print("Enter gmail account:")
-gmail_user = input()
+print("Enter password for gmail account {}:".format(gmail_user))
 gmail_pwd = getpass()
-send_mail(mail_to, "autostan started", "", None)
-
-njuskalo = "http://www.njuskalo.hr/iznajmljivanje-stanova?locationId=1153&price%5Bmin%5D=220&price%5Bmax%5D=405&mainArea%5Bmin%5D=29&mainArea%5Bmax%5D=65"
-index = "http://www.index.hr/oglasi/najam-stanova/gid/3279?pojam=&sortby=1&elementsNum=10&cijenaod=220&cijenado=405&tipoglasa=1&pojamZup=1153&grad=&naselje=&attr_Int_988=30&attr_Int_887=65&attr_bit_stan=&attr_bit_brojEtaza=&attr_gr_93_1=&attr_gr_93_2=&attr_Int_978=&attr_Int_1334=&attr_bit_prodavac=&attr_bit_eneregetskiCertifikat=&vezani_na=988-887_562-563_978-1334"
-oglasnik = "http://www.oglasnik.hr/stanovi-najam?ad_location_2%5B%5D=7442&ad_price_from=1.500&ad_price_to=3.010&ad_params_44_from=28&ad_params_44_to=65"
 
 xpath_njuskalo = '//*[@id="form_browse_detailed_search"]/div/div[1]/div[3]/div[4]/ul//article//h3/a'
 xpath_index = "//div[@class='results']//a[@class='result']"
@@ -63,22 +67,26 @@ display = Xvfb()
 display.start()
 driver = webdriver.Chrome()
 
-driver.get(njuskalo)
-elem = driver.find_elements_by_xpath(xpath_njuskalo)
-links_njuskalo = [e.get_attribute("href") for e in elem]
-print("Got njuskalo..")
+if njuskalo:
+    driver.get(njuskalo)
+    elem = driver.find_elements_by_xpath(xpath_njuskalo)
+    links_njuskalo = [e.get_attribute("href") for e in elem]
+    print("Got njuskalo..")
 
-driver.get(index)
-elem = driver.find_elements_by_xpath(xpath_index)
-links_index = [e.get_attribute("href") for e in elem]
-print("Got index..")
+if index:
+    driver.get(index)
+    elem = driver.find_elements_by_xpath(xpath_index)
+    links_index = [e.get_attribute("href") for e in elem]
+    print("Got index..")
 
-driver.get(oglasnik)
-elem = driver.find_elements_by_xpath(xpath_oglasnik)
-links_oglasnik = [e.get_attribute("href") for e in elem]
-print("Got oglasnik..")
+if oglasnik:
+    driver.get(oglasnik)
+    elem = driver.find_elements_by_xpath(xpath_oglasnik)
+    links_oglasnik = [e.get_attribute("href") for e in elem]
+    print("Got oglasnik..")
 
 print("Initialized!")
+send_mail(mail_to, "Autostan successfully started.", "", None)
 
 counter = 0
 try:
@@ -92,43 +100,46 @@ try:
         print(str(datetime.datetime.now()))
 
         ####### NJUSKALO
-        try:
-            driver.get(njuskalo)
-            elem = driver.find_elements_by_xpath(xpath_njuskalo)
-            temp_njuskalo = [e.get_attribute("href") for e in elem]
-            print("Got njuskalo..", end="\r")
-        except KeyboardInterrupt:
-            driver.quit()
-            display.stop()
-        except:
-            print("Skipping njuskalo!")
-            pass
+        if njuskalo:
+            try:
+                driver.get(njuskalo)
+                elem = driver.find_elements_by_xpath(xpath_njuskalo)
+                temp_njuskalo = [e.get_attribute("href") for e in elem]
+                print("Got njuskalo..", end="\r")
+            except KeyboardInterrupt:
+                driver.quit()
+                display.stop()
+            except:
+                print("Skipping njuskalo!")
+                pass
 
         ####### INDEX
-        try:
-            driver.get(index)
-            elem = driver.find_elements_by_xpath(xpath_index)
-            temp_index = [e.get_attribute("href") for e in elem]
-            print("Got index..", end="\r")
-        except KeyboardInterrupt:
-            driver.quit()
-            display.stop()
-        except:
-            print("Skipping index!")
-            pass
+        if index:
+            try:
+                driver.get(index)
+                elem = driver.find_elements_by_xpath(xpath_index)
+                temp_index = [e.get_attribute("href") for e in elem]
+                print("Got index..", end="\r")
+            except KeyboardInterrupt:
+                driver.quit()
+                display.stop()
+            except:
+                print("Skipping index!")
+                pass
 
         ####### OGLASNIK
-        try:
-            driver.get(oglasnik)
-            elem = driver.find_elements_by_xpath(xpath_oglasnik)
-            temp_oglasnik = [e.get_attribute("href") for e in elem]
-            print("Got oglasnik..", end="\r")
-        except KeyboardInterrupt:
-            driver.quit()
-            display.stop()
-        except:
-            print("Skipping oglasnik!")
-            pass
+        if oglasnik:
+            try:
+                driver.get(oglasnik)
+                elem = driver.find_elements_by_xpath(xpath_oglasnik)
+                temp_oglasnik = [e.get_attribute("href") for e in elem]
+                print("Got oglasnik..", end="\r")
+            except KeyboardInterrupt:
+                driver.quit()
+                display.stop()
+            except:
+                print("Skipping oglasnik!")
+                pass
 
         for t in temp_index+temp_njuskalo+temp_oglasnik:
             if t not in links_index+links_njuskalo+links_oglasnik:
@@ -155,7 +166,7 @@ try:
                 send_mail(mail_to, mail_title, mail_body, None)
             except Exception as e:
                 print(e + "\n" + mail_body)
-                send_mail("dsibenik@live.com", "Autostan error", e + "\n" + mail_body, None)
+                send_mail(mail_to, "Autostan error", e + "\n" + mail_body, None)
                 continue
 
         else:
