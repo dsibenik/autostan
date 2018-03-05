@@ -72,20 +72,27 @@ if njuskalo:
     elem = driver.find_elements_by_xpath(xpath_njuskalo)
     links_njuskalo = [e.get_attribute("href") for e in elem]
     print("Got njuskalo..")
+else:
+    links_njuskalo = []
 
 if index:
     driver.get(index)
     elem = driver.find_elements_by_xpath(xpath_index)
     links_index = [e.get_attribute("href") for e in elem]
     print("Got index..")
+else:
+    links_index = []
 
 if oglasnik:
     driver.get(oglasnik)
     elem = driver.find_elements_by_xpath(xpath_oglasnik)
     links_oglasnik = [e.get_attribute("href") for e in elem]
     print("Got oglasnik..")
+else:
+    links_oglasnik = []
 
 print("Initialized!")
+print()
 send_mail(mail_to, "Autostan successfully started.", "", None)
 
 counter = 0
@@ -105,7 +112,7 @@ try:
                 driver.get(njuskalo)
                 elem = driver.find_elements_by_xpath(xpath_njuskalo)
                 temp_njuskalo = [e.get_attribute("href") for e in elem]
-                print("Got njuskalo..", end="\r")
+                print("Got njuskalo...")
             except KeyboardInterrupt:
                 driver.quit()
                 display.stop()
@@ -119,7 +126,7 @@ try:
                 driver.get(index)
                 elem = driver.find_elements_by_xpath(xpath_index)
                 temp_index = [e.get_attribute("href") for e in elem]
-                print("Got index..", end="\r")
+                print("Got index...")
             except KeyboardInterrupt:
                 driver.quit()
                 display.stop()
@@ -133,7 +140,7 @@ try:
                 driver.get(oglasnik)
                 elem = driver.find_elements_by_xpath(xpath_oglasnik)
                 temp_oglasnik = [e.get_attribute("href") for e in elem]
-                print("Got oglasnik..", end="\r")
+                print("Got oglasnik...")
             except KeyboardInterrupt:
                 driver.quit()
                 display.stop()
@@ -141,12 +148,12 @@ try:
                 print("Skipping oglasnik!")
                 pass
 
+        # [print(x) for x in temp_index+temp_njuskalo+temp_oglasnik]
         for t in temp_index+temp_njuskalo+temp_oglasnik:
             if t not in links_index+links_njuskalo+links_oglasnik:
                 mail_body = mail_body + t + "\n"
 
         if mail_body != "":
-            #print("###############################")
             print("New entries found! Notifying..")
             print(mail_body)
 
