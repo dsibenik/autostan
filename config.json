@@ -1,6 +1,6 @@
 {
-    "gmail_username": "dsibenikv2",
-    "mail_to": "dsibenikv2@gmail.com",
+    "gmail_username": "username",
+    "mail_to": "example@example.com",
     "njuskalo": "http://www.njuskalo.hr/iznajmljivanje-stanova?locationId=1153&price%5Bmin%5D=220&price%5Bmax%5D=405&mainArea%5Bmin%5D=29&mainArea%5Bmax%5D=65",
     "oglasnik": "http://www.oglasnik.hr/stanovi-najam?ad_location_2%5B%5D=7442&ad_price_from=1.500&ad_price_to=3.010&ad_params_44_from=28&ad_params_44_to=65",
     "index": "http://www.index.hr/oglasi/najam-stanova/gid/3279?pojam=&sortby=1&elementsNum=10&cijenaod=0&cijenado=2243100&tipoglasa=1&pojamZup=1153&grad=1256&naselje=&attr_Int_988=&attr_Int_887=&attr_bit_stan=&attr_bit_brojEtaza=&attr_gr_93_1=&attr_gr_93_2=&attr_Int_978=&attr_Int_1334=&attr_bit_prodavac=&attr_bit_eneregetskiCertifikat=&vezani_na=988-887_562-563_978-1334"
