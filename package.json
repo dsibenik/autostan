@@ -1,0 +1,19 @@
+{
+  "name": "autostan",
+  "version": "0.0.1",
+  "description": "Notify     of changes on certain websites.",
+  "main": "app.js",
+  "author": "dsibenik",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "request": "latest",
+    "request-promise": "latest",
+    "cheerio": "latest",
+    "random-ua": "latest",
+    "nodemailer": "latest",
+    "password-prompt": "latest",
+    "sleep": "latest"
+  }
+}
