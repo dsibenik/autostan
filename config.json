@@ -1,6 +1,6 @@
 {
 	"from"     : "example@gmail.com",
-	"to"       : "example@example.com",
+	"to"       : "example@domain.com",
 	"subject"  : "Oglasi auto-scraper",
 	"njuskalo" : "https://www.njuskalo.hr/iznajmljivanje-stanova/zagreb",
 	"oglasnik" : "https://www.oglasnik.hr/stanovi-najam?ad_location_2%5B%5D=7442",
