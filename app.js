@@ -75,10 +75,6 @@ async function getListings(site) {
 	return list;
 }; 
 
-function mailNotification(content) {
-	console.log("Notifying...");
-	return;
-}
 
 async function main() {
 	const password = await prompt('Enter password for ' + config.from + ": ");
