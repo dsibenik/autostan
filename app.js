@@ -114,18 +114,18 @@ async function main() {
 		console.log("\nRefreshing @", new Date().toLocaleTimeString());
 		const listingsNew = [].concat(await getListings(njuskalo), await getListings(index), await getListings(oglasnik));
 		const diff = listingsNew.filter( x => !listingsOld.includes(x));
-		console.log(diff)
-		console.log(typeof(diff))
 
 		if(diff.length > 0) {
-			console.log("New listings: ", diff);
+			console.log("New listings: ");
 
-			html = "";
+			html = "New listings:";
 			counter++;
-			for( let i = 0; i < diff.length; i++)
+			for( let i = 0; i < diff.length; i++){
 				html = html + "<br/>" + diff[i];
+				console.log(diff[i])
+			}
 
-			mailOptions.subject = config.subject + " " + counter;
+			mailOptions.subject = config.subject + " - " + counter;
 			mailOptions.html = html;
 
 			transporter.sendMail(mailOptions, function (err, info) {
@@ -138,7 +138,7 @@ async function main() {
 		else {
 			console.log("No new listings.");
 		}
-		sleep.sleep(5*60);
+		sleep.sleep(60);
 	};
 };
 
