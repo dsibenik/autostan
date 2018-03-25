@@ -53,7 +53,7 @@ with open('config.json') as config:
     index = cfg['index']
     oglasnik = cfg['oglasnik']
 
-print("Enter password for gmail account {}:".format(gmail_user))
+print("Enter password for gmail account \"{}\":".format(gmail_user))
 gmail_pwd = getpass()
 
 xpath_njuskalo = '//*[@id="form_browse_detailed_search"]/div/div[1]/div[3]/div[4]/ul//article//h3/a'
