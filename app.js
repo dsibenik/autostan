@@ -1,7 +1,7 @@
 'use strict';
 
 const request = require("request-promise");
-const fs      = require('fs');
+// const fs      = require('fs');
 
 const cheerio    = require("cheerio");
 const randomUA   = require('random-ua');
@@ -46,7 +46,7 @@ async function getListings(site) {
 
 			        if (site.uri == "www.njuskalo.hr")
 				        $('li.EntityList-item--Regular .entity-title a').each(function(){
-				    		list.push(this.attribs.href);
+				    		list.push("https://www.njuskalo.hr" + this.attribs.href);
 				        });
 
 				    if (site.uri == "www.oglasnik.hr")
@@ -90,11 +90,22 @@ async function main() {
 		}
 	});
 
+	console.log("Initializing...");
+	let listingsOld = [].concat(await getListings(njuskalo), await getListings(index), await getListings(oglasnik));
+	console.log("Listings initialized!");
+
+	let html = 'Program successfully started.<br/><br/>Initialized listings:';
+
+	for( let i = 0; i < listingsOld.length; i++)
+		html = html + "<br/>" + listingsOld[i];
+
+	console.log(html)
+
 	let mailOptions = {
 		from: config.from, // sender address
 		to: config.to, // list of receivers
 		subject: config.subject, // Subject line
-		html: '<p>Program successfully started.</p>'// plain text body
+		html: html// plain text body
 	};
 
 	transporter.sendMail(mailOptions, function (err, info) {
@@ -104,25 +115,23 @@ async function main() {
 	   }
 	});
 
-	console.log("Initializing...");
-	let listingsOld = [].concat(await getListings(njuskalo), await getListings(index), await getListings(oglasnik));
-	console.log("Listings initialized!");
-
 	let counter = 0;
 	while(true) {
 		console.log("\nRefreshing @", new Date().toLocaleTimeString());
 		const listingsNew = [].concat(await getListings(njuskalo), await getListings(index), await getListings(oglasnik));
 		const diff = listingsNew.filter( x => !listingsOld.includes(x));
+		console.log(diff)
+		console.log(typeof(diff))
 
 		if(diff.length > 0) {
 			console.log("New listings: ", diff);
 
-			let html = "";
+			html = "";
 			counter++;
-			for( let i; i < diff.length; i++)
-				html = html + "<p>" + diff[i] + "</p>";
+			for( let i = 0; i < diff.length; i++)
+				html = html + "<br/>" + diff[i];
 
-			mail.options.subject = config.subject + " " + counter;
+			mailOptions.subject = config.subject + " " + counter;
 			mailOptions.html = html;
 
 			transporter.sendMail(mailOptions, function (err, info) {
@@ -135,7 +144,7 @@ async function main() {
 		else {
 			console.log("No new listings.");
 		}
-		sleep.sleep(60*5);
+		sleep.sleep(60);
 	};
 };
 
