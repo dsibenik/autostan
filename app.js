@@ -90,10 +90,8 @@ async function main() {
 	let listingsOld = [].concat(await getListings(njuskalo), await getListings(index), await getListings(oglasnik));
 	console.log("Listings initialized!");
 
-	let html = 'Program successfully started.<br/><br/>Initialized listings:';
-
-	for( let i = 0; i < listingsOld.length; i++)
-		html = html + "<br/>" + listingsOld[i];
+	let html = 'Program successfully initialized.<br/><br/>Getting results from:';
+	html = html + "<br/>" + config.njuskalo + "<br/>" + config.index + "<br/>" + config.oglasnik;
 
 	console.log(html)
 
@@ -140,7 +138,7 @@ async function main() {
 		else {
 			console.log("No new listings.");
 		}
-		sleep.sleep(60);
+		sleep.sleep(5*60);
 	};
 };
 
