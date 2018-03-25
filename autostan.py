@@ -45,7 +45,7 @@ def send_mail(to, subject, text, attach):
     # Should be mailServer.quit(), but that crashes...
     mailServer.close()
 
-with open('config.json') as config:
+with open('./config.json') as config:
     cfg = json.load(config)
     gmail_user = cfg['gmail_username']
     mail_to = cfg['mail_to']
